@@ -1,0 +1,324 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Ossatura — arquitetura e risco para sistemas críticos que não podem falhar.">
+  <title>Ossatura | Plano de Negócios</title>
+  <style>
+    :root {
+      --ink: #17342f;
+      --muted: #58706a;
+      --paper: #f5f1e7;
+      --white: #fffdf8;
+      --line: #d9d2c4;
+      --accent: #ea6b35;
+      --accent-dark: #bd4d20;
+      --aqua: #9fd9c8;
+      --gold: #e2b54c;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--paper);
+      font-family: Georgia, "Times New Roman", serif;
+      line-height: 1.55;
+    }
+
+    .wrap { width: min(1120px, calc(100% - 40px)); margin: 0 auto; }
+
+    header {
+      background: var(--ink);
+      color: var(--white);
+      padding: 22px 0;
+    }
+
+    nav { display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+
+    .brand {
+      color: var(--aqua);
+      font-family: "Courier New", monospace;
+      font-size: 0.85rem;
+      font-weight: bold;
+      letter-spacing: 0.08em;
+      text-decoration: none;
+      text-transform: uppercase;
+    }
+
+    nav ul { display: flex; flex-wrap: wrap; gap: 18px; list-style: none; margin: 0; padding: 0; }
+    nav a { color: var(--white); font-family: Arial, sans-serif; font-size: 0.8rem; text-decoration: none; }
+    nav a:hover { color: var(--aqua); }
+    .nav-cta { background: var(--accent); color: var(--white) !important; font-family: Arial, sans-serif; font-size: 0.75rem; font-weight: bold; letter-spacing: 0.06em; padding: 9px 16px; text-decoration: none; text-transform: uppercase; white-space: nowrap; }
+    .nav-cta:hover { background: var(--accent-dark) !important; }
+
+    .hero {
+      overflow: hidden;
+      padding: 92px 0 72px;
+      position: relative;
+    }
+
+    .hero::before {
+      background: repeating-linear-gradient(90deg, transparent 0, transparent 59px, rgba(23, 52, 47, 0.06) 60px);
+      content: "";
+      inset: 0;
+      pointer-events: none;
+      position: absolute;
+    }
+
+    .hero-content { max-width: 780px; position: relative; }
+
+    .eyebrow {
+      color: var(--accent-dark);
+      font-family: Arial, sans-serif;
+      font-size: 0.75rem;
+      font-weight: bold;
+      letter-spacing: 0.12em;
+      margin: 0 0 16px;
+      text-transform: uppercase;
+    }
+
+    h1, h2, h3 { line-height: 1.05; margin-top: 0; }
+    h1 { font-size: clamp(2.8rem, 7vw, 5.8rem); letter-spacing: -0.04em; margin-bottom: 24px; }
+    h2 { font-size: clamp(2rem, 4vw, 3.25rem); letter-spacing: -0.03em; margin-bottom: 24px; }
+    h3 { font-size: 1.25rem; margin-bottom: 10px; }
+
+    .lead { color: #37544d; font-size: clamp(1.15rem, 2vw, 1.5rem); margin: 0; max-width: 650px; }
+
+    .hero-note {
+      align-items: center;
+      border-top: 1px solid var(--line);
+      display: flex;
+      gap: 14px;
+      margin-top: 52px;
+      padding-top: 18px;
+    }
+
+    .hero-note strong { color: var(--accent-dark); font-family: Arial, sans-serif; font-size: 0.8rem; letter-spacing: 0.06em; text-transform: uppercase; }
+
+    section { padding: 76px 0; }
+    .dark { background: var(--ink); color: var(--white); }
+    .dark h2 { color: var(--aqua); }
+    .dark .eyebrow { color: var(--gold); }
+
+    .grid { display: grid; gap: 24px; grid-template-columns: repeat(3, 1fr); }
+
+    .card {
+      background: var(--white);
+      border-top: 4px solid var(--accent);
+      min-height: 210px;
+      padding: 28px;
+    }
+
+    .dark .card { background: #244942; border-top-color: var(--gold); }
+    .card p { color: var(--muted); margin-bottom: 0; }
+    .dark .card p { color: #d7e8e2; }
+
+    .number {
+      color: var(--accent);
+      display: block;
+      font-family: Arial, sans-serif;
+      font-size: 0.75rem;
+      font-weight: bold;
+      letter-spacing: 0.1em;
+      margin-bottom: 32px;
+    }
+
+    .offer-grid { display: grid; gap: 0; grid-template-columns: repeat(4, 1fr); }
+    .offer { border: 1px solid rgba(255,255,255,0.12); padding: 30px; }
+    .offer:first-child { background: var(--aqua); color: var(--ink); }
+    .offer:first-child .tag { color: var(--accent-dark); }
+    .offer:first-child .price { color: var(--ink); }
+    .offer:first-child p { color: #2a4a42; }
+    .tag { color: var(--gold); font-family: Arial, sans-serif; font-size: 0.72rem; font-weight: bold; letter-spacing: 0.08em; text-transform: uppercase; }
+    .price { display: block; font-family: Arial, sans-serif; font-size: 1.45rem; font-weight: bold; margin: 24px 0 8px; }
+    .offer p { color: #b8d4cc; margin: 0; }
+    .offer-badge { background: var(--accent); color: var(--white); display: inline-block; font-family: Arial, sans-serif; font-size: 0.62rem; font-weight: bold; letter-spacing: 0.1em; margin-top: 14px; padding: 4px 8px; text-transform: uppercase; }
+
+    .split { display: grid; gap: 62px; grid-template-columns: 0.95fr 1.05fr; }
+    .list { list-style: none; margin: 0; padding: 0; }
+    .list li { border-bottom: 1px solid var(--line); padding: 18px 0; }
+    .list strong { display: block; font-family: Arial, sans-serif; font-size: 0.9rem; margin-bottom: 3px; }
+
+    .priority { border-left: 5px solid var(--accent); padding: 5px 0 5px 22px; }
+    .priority + .priority { margin-top: 26px; }
+    .priority p { color: #d7e8e2; margin: 0; }
+
+    .metric { color: var(--gold); font-family: Arial, sans-serif; font-size: clamp(3.5rem, 7vw, 6rem); font-weight: bold; letter-spacing: -0.07em; line-height: 0.9; }
+    .metric-label { color: #d7e8e2; font-family: Arial, sans-serif; margin-top: 10px; }
+
+    .roadmap { counter-reset: step; display: grid; gap: 18px; grid-template-columns: repeat(3, 1fr); }
+    .step { border-top: 1px solid var(--ink); padding-top: 24px; }
+    .step::before { color: var(--accent); content: "0" counter(step); counter-increment: step; font-family: Arial, sans-serif; font-size: 0.82rem; font-weight: bold; letter-spacing: 0.1em; }
+    .step h3 { margin-top: 20px; }
+
+    footer { background: #102622; color: #b8d1c8; font-family: Arial, sans-serif; font-size: 0.8rem; padding: 28px 0; }
+
+    @media (max-width: 760px) {
+      .wrap { width: min(100% - 32px, 1120px); }
+      nav { align-items: flex-start; flex-direction: column; }
+      .hero { padding: 70px 0 56px; }
+      section { padding: 58px 0; }
+      .grid, .offer-grid, .split, .roadmap { grid-template-columns: 1fr; }
+      .offer { border-bottom: 0; }
+      .offer:last-child { border-bottom: 1px solid var(--line); }
+      .split { gap: 36px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="wrap" aria-label="Navegação principal">
+      <a class="brand" href="#inicio">Ossatura</a>
+      <ul>
+        <li><a href="#tese">Tese</a></li>
+        <li><a href="#ofertas">Ofertas</a></li>
+        <li><a href="#prioridades">Prioridades</a></li>
+        <li><a href="#rota">Rota de 90 dias</a></li>
+      </ul>
+      <a class="nav-cta" href="plano-negocios.html">Ver plano completo</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero" id="inicio">
+      <div class="wrap hero-content">
+        <p class="eyebrow">Ossatura | Arquitetura e Risco para Sistemas Críticos</p>
+        <h1>Decisões técnicas para sistemas que não podem falhar.</h1>
+        <p class="lead">Uma prática de consultoria em arquitetura, modernização e risco operacional para qualquer sistema onde uma falha técnica custa caro.</p>
+        <div class="hero-note">
+          <strong>Posicionamento</strong>
+          <span>Vender redução mensurável de risco e clareza executiva, não horas de código.</span>
+        </div>
+      </div>
+    </section>
+
+    <section id="tese">
+      <div class="wrap">
+        <p class="eyebrow">A tese</p>
+        <h2>Trinta anos de experiência devem virar uma categoria própria.</h2>
+        <div class="grid">
+          <article class="card">
+            <span class="number">01 / RISCO</span>
+            <h3>Indisponibilidade custa caro</h3>
+            <p>Sistemas críticos exigem resiliência, observabilidade e planos de recuperação que sobrevivam ao incidente real.</p>
+          </article>
+          <article class="card">
+            <span class="number">02 / LEGADO</span>
+            <h3>Modernizar sem paralisar</h3>
+            <p>A migração de sistemas críticos precisa preservar operação, integridade de dados e obrigações regulatórias.</p>
+          </article>
+          <article class="card">
+            <span class="number">03 / CONTEXTO</span>
+            <h3>Conhecimento de domínio</h3>
+            <p>Integrações de missão crítica, segurança, compliance e domínio regulatório não se resolvem só com uma stack moderna.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="dark" id="ofertas">
+      <div class="wrap">
+        <p class="eyebrow">Modelo comercial</p>
+        <h2>Ofertas com escopo, resultado e preço claros.</h2>
+        <div class="offer-grid">
+          <article class="offer">
+            <span class="tag">Retainer mensal</span>
+            <h3>Arquitetura & Modernização</h3>
+            <span class="price">R$ 15 mil – R$ 25 mil/mês</span>
+            <p>Advisory contínuo para decisões de arquitetura, riscos e evolução de plataformas críticas.</p>
+          </article>
+          <article class="offer">
+            <span class="tag">Projeto fechado</span>
+            <h3>Tech Due Diligence</h3>
+            <span class="price">R$ 20 mil – R$ 45 mil</span>
+            <p>Avaliação independente de produto, código, infraestrutura, segurança e passivos técnicos antes do aporte.</p>
+          </article>
+          <article class="offer">
+            <span class="tag">Projeto / manutenção</span>
+            <h3>Legacy Code Rescue</h3>
+            <span class="price">R$ 15 mil – R$ 30 mil</span>
+            <p>Diagnóstico e plano de saída segura para sistemas críticos em COBOL, mainframe ou arquiteturas fora de suporte.</p>
+            <span class="offer-badge">Diferencial exclusivo</span>
+          </article>
+          <article class="offer">
+            <span class="tag">Advisory mensal</span>
+            <h3>Mentoria para CTOs</h3>
+            <span class="price">R$ 6 mil – R$ 10 mil/mês</span>
+            <p>Acompanhamento estratégico para CTOs em tração: decisões técnicas, revisão de roadmap e registro de riscos.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="wrap split">
+        <div>
+          <p class="eyebrow">Entrada no mercado</p>
+          <h2>Começar onde a decisão é mais rápida.</h2>
+          <p>O foco inicial recomendado são fundos de investimento e scale-ups em Series A/B. Eles valorizam parecer independente, têm urgência e ciclos comerciais mais curtos que grandes corporações.</p>
+        </div>
+        <ul class="list">
+          <li><strong>Fundos de investimento</strong>Due diligence técnica como porta de entrada e relacionamento recorrente com o portfólio.</li>
+          <li><strong>Scale-ups em tração</strong>Diagnóstico de arquitetura e roadmap de confiabilidade como oferta inicial produtizada.</li>
+          <li><strong>Operações reguladas de médio porte</strong>Canal de expansão após referências, casos comprovados e preparação para ciclos de compra mais longos.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="dark" id="prioridades">
+      <div class="wrap split">
+        <div>
+          <p class="eyebrow">Ajustes necessários</p>
+          <h2>O plano precisa sair da tese e ganhar operação.</h2>
+          <div class="metric">90</div>
+          <p class="metric-label">dias para validar uma oferta e seu canal de aquisição.</p>
+        </div>
+        <div>
+          <div class="priority">
+            <h3>Trocar garantia por evidência</h3>
+            <p>Prometer redução mensurável de risco, diagnóstico e plano de mitigação. Evitar garantias absolutas de disponibilidade ou conformidade.</p>
+          </div>
+          <div class="priority">
+            <h3>Produtizar o serviço</h3>
+            <p>Definir prazo, entregáveis, critérios de avaliação, limites de responsabilidade e exclusões para cada oferta.</p>
+          </div>
+          <div class="priority">
+            <h3>Provar autoridade</h3>
+            <p>Reunir casos anonimizados, experiência de domínio, indicadores de impacto e referências que sustentem o ticket.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="rota">
+      <div class="wrap">
+        <p class="eyebrow">Execução</p>
+        <h2>Rota prática para os próximos 90 dias.</h2>
+        <div class="roadmap">
+          <article class="step">
+            <h3>Estruturar</h3>
+            <p>Criar proposta, checklist de diligência, modelo de contrato, NDA e três estudos de caso anonimizados.</p>
+          </article>
+          <article class="step">
+            <h3>Validar</h3>
+            <p>Mapear 15 contatos da rede atual em empresas de alto crescimento e fundos de investimento. Priorizar acesso direto a sócios de VC e CTOs de Series A/B. Fechar as 3 primeiras conversas de descoberta sem depender de marketing.</p>
+          </article>
+          <article class="step">
+            <h3>Converter</h3>
+            <p>Usar diligências e diagnósticos para converter clientes em retainers de advisory contínuo.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">Ossatura — Arquitetura e risco para sistemas críticos. <a href="plano-negocios.html" style="color:#9fd9c8;margin-left:18px">Plano completo →</a></div>
+  </footer>
+</body>
+</html>

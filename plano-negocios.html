@@ -1,0 +1,281 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Plano de negócios — Ossatura: arquitetura e risco para sistemas críticos.">
+  <title>Plano de Negócios | Ossatura</title>
+  <style>
+    :root {
+      --ink: #122b28;
+      --ink-light: #244b45;
+      --paper: #f6f2e8;
+      --white: #fffdf8;
+      --line: #d7d0bf;
+      --orange: #e56332;
+      --yellow: #e8bb4a;
+      --mint: #b9dfcf;
+      --muted: #526861;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--paper); color: var(--ink); font-family: Georgia, "Times New Roman", serif; line-height: 1.55; margin: 0; }
+    a { color: inherit; }
+    .wrap { margin: 0 auto; width: min(1160px, calc(100% - 40px)); }
+
+    header { background: var(--ink); color: var(--white); padding: 18px 0; }
+    nav { align-items: center; display: flex; gap: 24px; justify-content: space-between; }
+    .brand { color: var(--mint); font-family: "Courier New", monospace; font-size: .82rem; font-weight: 700; letter-spacing: .1em; text-decoration: none; text-transform: uppercase; }
+    nav ul { display: flex; flex-wrap: wrap; gap: 18px; list-style: none; margin: 0; padding: 0; }
+    nav li { font-family: Arial, sans-serif; font-size: .77rem; }
+    nav a { text-decoration: none; }
+    nav a:hover { color: var(--mint); }
+
+    .hero { background: var(--ink); color: var(--white); overflow: hidden; padding: 88px 0 76px; position: relative; }
+    .hero::after { border: 1px solid rgba(185, 223, 207, .3); border-radius: 50%; content: ""; height: 570px; position: absolute; right: -160px; top: -165px; width: 570px; }
+    .hero .wrap { position: relative; z-index: 1; }
+    .eyebrow { color: var(--orange); font-family: Arial, sans-serif; font-size: .72rem; font-weight: 700; letter-spacing: .13em; margin: 0 0 17px; text-transform: uppercase; }
+    h1, h2, h3 { line-height: 1.07; margin-top: 0; }
+    h1 { font-size: clamp(3.1rem, 7vw, 6.4rem); letter-spacing: -.045em; margin-bottom: 24px; max-width: 920px; }
+    h2 { font-size: clamp(2rem, 4vw, 3.4rem); letter-spacing: -.035em; margin-bottom: 22px; }
+    h3 { font-size: 1.22rem; margin-bottom: 10px; }
+    .lead { color: #d4e8df; font-size: clamp(1.14rem, 2vw, 1.45rem); margin: 0; max-width: 710px; }
+    .hero-data { display: flex; flex-wrap: wrap; gap: 34px; margin-top: 54px; }
+    .hero-data div { border-left: 2px solid var(--orange); padding-left: 13px; }
+    .hero-data strong { color: var(--yellow); display: block; font-family: Arial, sans-serif; font-size: 1.12rem; }
+    .hero-data span { color: #d4e8df; font-family: Arial, sans-serif; font-size: .77rem; }
+
+    section { padding: 76px 0; }
+    .section-head { display: grid; gap: 32px; grid-template-columns: 1fr 1fr; margin-bottom: 36px; }
+    .section-head > p:not(.eyebrow) { color: var(--muted); font-size: 1.1rem; margin: 0; padding-top: 9px; }
+    .dark { background: var(--ink); color: var(--white); }
+    .dark .eyebrow { color: var(--yellow); }
+    .dark h2 { color: var(--mint); }
+
+    .grid-3 { display: grid; gap: 18px; grid-template-columns: repeat(3, 1fr); }
+    .card { background: var(--white); border-top: 4px solid var(--orange); padding: 27px; }
+    .card p, .offer p { color: var(--muted); margin-bottom: 0; }
+    .card-number { color: var(--orange); display: block; font-family: Arial, sans-serif; font-size: .73rem; font-weight: 700; letter-spacing: .1em; margin-bottom: 30px; }
+
+    .table-wrap { overflow-x: auto; }
+    table { border-collapse: collapse; font-size: .95rem; min-width: 720px; width: 100%; }
+    th { color: var(--orange); font-family: Arial, sans-serif; font-size: .72rem; letter-spacing: .08em; text-align: left; text-transform: uppercase; }
+    th, td { border-bottom: 1px solid var(--line); padding: 16px 14px; vertical-align: top; }
+    th:first-child, td:first-child { padding-left: 0; }
+    .dark th, .dark td { border-color: rgba(255, 255, 255, .2); }
+    .dark th { color: var(--yellow); }
+
+    .offer-grid { display: grid; grid-template-columns: repeat(4, 1fr); }
+    .offer { border: 1px solid var(--line); min-height: 350px; padding: 25px; }
+    .offer:first-child { background: var(--mint); }
+    .label { color: var(--orange); font-family: Arial, sans-serif; font-size: .7rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+    .price { display: block; font-family: Arial, sans-serif; font-size: 1.45rem; font-weight: 700; margin: 28px 0 5px; }
+    .detail { color: var(--muted); font-family: Arial, sans-serif; font-size: .82rem; }
+
+    .two { display: grid; gap: 55px; grid-template-columns: .8fr 1.2fr; }
+    .checklist { list-style: none; margin: 0; padding: 0; }
+    .checklist li { border-bottom: 1px solid var(--line); padding: 16px 0 16px 28px; position: relative; }
+    .checklist li::before { color: var(--orange); content: "+"; font-family: Arial, sans-serif; font-size: 1.15rem; font-weight: bold; left: 0; position: absolute; }
+    .dark .checklist li { border-color: rgba(255, 255, 255, .2); }
+
+    .financials { display: grid; gap: 18px; grid-template-columns: repeat(3, 1fr); }
+    .scenario { background: var(--ink-light); border-top: 3px solid var(--yellow); padding: 28px; }
+    .scenario p { color: #d4e8df; min-height: 52px; }
+    .scenario strong { color: var(--yellow); display: block; font-family: Arial, sans-serif; font-size: 2rem; letter-spacing: -.04em; }
+    .scenario span { color: var(--mint); font-family: Arial, sans-serif; font-size: .77rem; }
+
+    .metric-box { background: var(--orange); color: var(--ink); padding: 30px; }
+    .metric-box .big { display: block; font-family: Arial, sans-serif; font-size: clamp(3rem, 6vw, 5rem); font-weight: 700; letter-spacing: -.07em; line-height: .9; }
+    .metric-box p { margin: 14px 0 0; }
+
+    .timeline { counter-reset: item; display: grid; gap: 18px; grid-template-columns: repeat(3, 1fr); }
+    .phase { border-top: 2px solid var(--ink); padding-top: 22px; }
+    .phase::before { color: var(--orange); content: "0" counter(item); counter-increment: item; font-family: Arial, sans-serif; font-size: .75rem; font-weight: bold; letter-spacing: .12em; }
+    .phase h3 { margin-top: 19px; }
+    .phase p { color: var(--muted); margin-bottom: 0; }
+
+    details { border-bottom: 1px solid var(--line); }
+    summary { cursor: pointer; font-family: Arial, sans-serif; font-size: 1rem; font-weight: 700; list-style: none; padding: 18px 30px 18px 0; position: relative; }
+    summary::after { color: var(--orange); content: "+"; font-size: 1.4rem; position: absolute; right: 4px; top: 11px; }
+    details[open] summary::after { content: "-"; }
+    details p { color: var(--muted); margin: 0 0 20px; max-width: 850px; }
+
+    .closing { background: var(--mint); padding: 74px 0; }
+    .closing p { font-size: 1.23rem; max-width: 700px; }
+    .button { background: var(--ink); color: var(--white); display: inline-block; font-family: Arial, sans-serif; font-size: .8rem; font-weight: 700; letter-spacing: .06em; margin-top: 14px; padding: 14px 19px; text-decoration: none; text-transform: uppercase; }
+    .button:hover { background: var(--orange); }
+    footer { background: #0c1e1b; color: #bad2c8; font-family: Arial, sans-serif; font-size: .78rem; padding: 27px 0; }
+
+    @media (max-width: 850px) {
+      .offer-grid { grid-template-columns: repeat(2, 1fr); }
+      .grid-3, .financials { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 650px) {
+      .wrap { width: min(100% - 30px, 1160px); }
+      nav { align-items: flex-start; flex-direction: column; }
+      .hero { padding: 70px 0 58px; }
+      section { padding: 57px 0; }
+      .section-head, .two, .timeline, .offer-grid { grid-template-columns: 1fr; }
+      .offer { min-height: auto; }
+      .hero-data { gap: 18px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="wrap" aria-label="Navegação principal">
+      <a class="brand" href="index.html">← Ossatura</a>
+      <ul>
+        <li><a href="#tese">Tese</a></li>
+        <li><a href="#ofertas">Ofertas</a></li>
+        <li><a href="#numeros">Números</a></li>
+        <li><a href="#execucao">Execução</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero" id="inicio">
+      <div class="wrap">
+        <p class="eyebrow">Ossatura — Arquitetura e Risco para Sistemas Críticos</p>
+        <h1>Decisões técnicas para operações que não podem parar.</h1>
+        <p class="lead">Uma prática premium de consultoria em arquitetura, modernização e risco para qualquer operação onde a falha técnica custa caro.</p>
+        <div class="hero-data">
+          <div><strong>12 meses</strong><span>horizonte de implementação</span></div>
+          <div><strong>2 retainers</strong><span>capacidade máxima inicial</span></div>
+          <div><strong>R$ 46 mil</strong><span>receita mensal no cenário base</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="tese">
+      <div class="wrap">
+        <div class="section-head">
+          <div><p class="eyebrow">01 / Decisão estratégica</p><h2>O negócio vende critério, não horas de código.</h2></div>
+          <p>A proposta é reduzir risco operacional, de investimento e de modernização por meio de decisão técnica independente, com escopo claro e resultado executivo.</p>
+        </div>
+        <div class="grid-3">
+          <article class="card"><span class="card-number">FINTECHS EM TRAÇÃO</span><h3>Confiabilidade sob crescimento</h3><p>Diagnóstico priorizado para disponibilidade, segurança, dados, escala e integrações que já não acompanham a operação.</p></article>
+          <article class="card"><span class="card-number">FUNDOS DE VC E PE</span><h3>Risco antes do aporte</h3><p>Parecer independente para entender sustentabilidade técnica, time, processo e os passivos escondidos no negócio avaliado.</p></article>
+          <article class="card"><span class="card-number">INSTITUIÇÕES MÉDIAS</span><h3>Legado sem ruptura</h3><p>Arquitetura de transição para modernizar sistemas críticos, respeitando continuidade, dados e obrigações reguladas.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="dark">
+      <div class="wrap two">
+        <div><p class="eyebrow">Proposta de valor</p><h2>Velocidade de decisão com risco explícito.</h2></div>
+        <ul class="checklist">
+          <li>Identificar riscos relevantes antes que se tornem incidentes ou passivos.</li>
+          <li>Priorizar ações por impacto, urgência, custo e dependências.</li>
+          <li>Apoiar decisões de arquitetura, investimento e modernização com avaliação independente.</li>
+          <li>Elevar a qualidade da conversa entre tecnologia, diretoria, investidores e auditoria.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section>
+      <div class="wrap">
+        <div class="section-head">
+          <div><p class="eyebrow">02 / Mercado de entrada</p><h2>Começar onde a decisão é mais acessível.</h2></div>
+          <p>Fundos de investimento e scale-ups em Series A/B são o foco inicial. A dor é objetiva, o escopo pode ser fechado e uma boa entrega abre caminho para o portfólio.</p>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Segmento</th><th>Dor principal</th><th>Ciclo de venda</th><th>Ticket potencial</th><th>Prioridade</th></tr></thead>
+            <tbody>
+              <tr><td>Fundos de VC/PE</td><td>Avaliar risco técnico antes ou após aporte</td><td>Curto a médio</td><td>R$ 20 mil a R$ 45 mil</td><td>1</td></tr>
+              <tr><td>Scale-ups Series A/B</td><td>Corrigir fragilidades de arquitetura após crescimento</td><td>Médio</td><td>R$ 15 mil a R$ 25 mil/mês</td><td>1</td></tr>
+              <tr><td>Operações com legado crítico</td><td>Resgate de sistemas COBOL, mainframe ou stacks descontinuadas</td><td>Curto (urgência)</td><td>R$ 15 mil a R$ 30 mil/projeto</td><td>1</td></tr>
+              <tr><td>Operações reguladas de médio porte</td><td>Modernizar legado e atender exigências de compliance</td><td>Longo</td><td>Maior, com custo comercial alto</td><td>2</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="dark" id="ofertas">
+      <div class="wrap">
+        <p class="eyebrow">03 / Portfólio comercial</p>
+        <h2>Ofertas fechadas protegem o valor do trabalho.</h2>
+        <div class="offer-grid">
+          <article class="offer"><span class="label">2 a 4 semanas · porta de entrada</span><h3>Diagnóstico de Resiliência</h3><span class="price">R$ 18 mil – R$ 30 mil</span><span class="detail">Scale-ups e operações críticas</span><p>Mapa de riscos, avaliação de arquitetura, prioridades e roadmap de 90 dias. Ideal para o primeiro contrato.</p></article>
+          <article class="offer"><span class="label">2 a 3 semanas</span><h3>Tech Due Diligence</h3><span class="price">R$ 25 mil – R$ 45 mil</span><span class="detail">Fundos e compradores</span><p>Parecer executivo, matriz de risco, avaliação de time e recomendações para comitê de investimento ou aquisição.</p></article>
+          <article class="offer"><span class="label">Projeto / manutenção preventiva</span><h3>Legacy Code Rescue</h3><span class="price">R$ 15 mil – R$ 30 mil</span><span class="detail">Diferencial exclusivo</span><p>Diagnóstico e plano de saída segura para sistemas COBOL, mainframe ou stacks críticas fora de suporte em produção.</p></article>
+          <article class="offer"><span class="label">Advisory mensal</span><h3>Mentoria para CTOs</h3><span class="price">R$ 6 mil – R$ 10 mil/mês</span><span class="detail">Empresas em tração</span><p>Encontros mensais para decisão técnica, revisão de roadmap e desenvolvimento de liderança de engenharia.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section id="numeros">
+      <div class="wrap">
+        <div class="section-head">
+          <div><p class="eyebrow">04 / Economia do negócio</p><h2>Receita recorrente, capacidade limitada, margem defendida.</h2></div>
+          <p>As projeções são premissas de planejamento e devem ser atualizadas com propostas reais, recebimentos e orientação contábil. A operação inicial não requer equipe fixa.</p>
+        </div>
+        <div class="financials">
+          <article class="scenario"><span>Conservador</span><h3>Um retainer e uma diligência trimestral</h3><p>R$ 15 mil recorrentes e uma diligência de R$ 20 mil a cada trimestre.</p><strong>R$ 21,7 mil</strong><span>receita mensal média</span></article>
+          <article class="scenario"><span>Base</span><h3>Dois retainers e uma diligência trimestral</h3><p>Dois contratos de R$ 18 mil e uma diligência de R$ 30 mil por trimestre.</p><strong>R$ 46 mil</strong><span>receita mensal média</span></article>
+          <article class="scenario"><span>Meta</span><h3>Dois retainers premium e diligência trimestral</h3><p>Dois contratos de R$ 22 mil e uma diligência de R$ 40 mil por trimestre.</p><strong>R$ 57,3 mil</strong><span>receita mensal média</span></article>
+        </div>
+        <div class="two" style="margin-top: 52px;">
+          <div class="metric-box"><span class="big">R$ 34,9 mil</span><p>Estimativa mensal no cenário base, após R$ 4,6 mil provisionados para impostos e R$ 6,5 mil de custos operacionais. Validar a estrutura tributária com contador.</p></div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Capacidade</th><th>Limite recomendado</th></tr></thead>
+              <tbody><tr><td>Retainers simultâneos</td><td>2 clientes de até 20 h/mês</td></tr><tr><td>Diligências simultâneas</td><td>1 projeto por vez</td></tr><tr><td>Horas faturáveis</td><td>60 a 80 h/mês</td></tr><tr><td>Vendas e administração</td><td>35 a 45 h/mês</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="dark">
+      <div class="wrap two">
+        <div><p class="eyebrow">05 / Go-to-market</p><h2>Autoridade pública e conversa privada.</h2><p style="color:#d4e8df">O canal mais eficiente para este perfil é <strong style="color:var(--mint)">indicação direta da rede existente</strong> — não marketing digital. Priorize sócios de VC, CTOs de scale-ups e líderes de tecnologia de operações críticas que você já conhece.</p></div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Etapa mensal</th><th>Meta</th><th>Conversão referência</th></tr></thead>
+            <tbody><tr><td>Contatos da rede ativados (1ª abordagem)</td><td>15</td><td>—</td></tr><tr><td>Conversas de descoberta realizadas</td><td>8</td><td>53%</td></tr><tr><td>Diagnósticos de dor e aderência</td><td>5</td><td>62%</td></tr><tr><td>Propostas enviadas</td><td>3</td><td>60%</td></tr><tr><td>Contratos fechados</td><td>1</td><td>33%</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section id="execucao">
+      <div class="wrap">
+        <p class="eyebrow">06 / Implementação</p>
+        <h2>Os primeiros 90 dias devem validar compra, não só interesse.</h2>
+        <div class="timeline">
+          <article class="phase"><h3>Dias 1 a 30</h3><p>Estruturar empresa, contrato, NDA, escopos, checklist e apresentação. Mapear 15 contatos da rede em scale-ups, fundos e operações críticas. Agendar 8 conversas de descoberta priorizando acesso direto a sócios de VC e CTOs de Series A/B.</p></article>
+          <article class="phase"><h3>Dias 31 a 60</h3><p>Enviar três propostas, fechar o primeiro projeto pago (Diagnóstico de Resiliência ou Legacy Rescue), entregar leitura executiva e transformar a experiência em estudo de caso autorizado ou anonimizado.</p></article>
+          <article class="phase"><h3>Dias 61 a 90</h3><p>Converter o diagnóstico em advisory, fechar primeiro retainer ou segunda diligência e implantar rotina de CRM, pipeline e caixa.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="wrap two">
+        <div><p class="eyebrow">07 / Risco e governança</p><h2>Proteger a reputação é parte do produto.</h2></div>
+        <div>
+          <details><summary>Escopo e responsabilidade</summary><p>Todo contrato deve definir acesso, premissas, entregáveis, limites de responsabilidade, pagamento e exclusões. A consultoria recomenda; o cliente executa e opera seus controles.</p></details>
+          <details><summary>Confidencialidade e dados</summary><p>Usar NDA antes do acesso, princípio de mínimo privilégio, armazenamento seguro e descarte documentado de dados conforme contrato e LGPD.</p></details>
+          <details><summary>Dependência e sobrecarga</summary><p>Nenhum cliente deve superar 50% da receita após o primeiro ano. Limitar a dois retainers e manter atividade comercial mesmo com a agenda cheia.</p></details>
+          <details><summary>Gatilhos de correção</summary><p>Sem contrato pago após 90 dias e 15 conversas qualificadas da rede, revisar ICP, promessa e ticket. Se diligências vendem e retainers não, tornar a proposta de advisory mais concreta.</p></details>
+        </div>
+      </div>
+    </section>
+
+    <section class="closing">
+      <div class="wrap">
+        <p class="eyebrow">Próxima ação</p>
+        <h2>Vender a primeira oferta fechada.</h2>
+        <p>Selecionar 15 contatos com contexto em scale-ups, fundos ou operações de tecnologia crítica e fechar o primeiro Diagnóstico de Resiliência ou Legacy Rescue em três semanas, com mapa de riscos e roadmap executivo.</p>
+        <a class="button" href="estudo-completo.html">Ver estudo completo →</a>
+      </div>
+    </section>
+  </main>
+  <footer><div class="wrap">Ossatura — Arquitetura e risco para sistemas críticos. <a href="index.html" style="color:#9fd9c8;margin-left:16px">← Visão geral</a></div></footer>
+</body>
+</html>

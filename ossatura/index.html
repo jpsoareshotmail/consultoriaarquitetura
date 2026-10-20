@@ -1,0 +1,1090 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ossatura — Arquitetura de Software e Risco para Sistemas Críticos</title>
+  <meta name="description" content="Consultoria independente de arquitetura de software, risco e modernização para sistemas críticos que não podem falhar. Mais de 30 anos de experiência em tecnologia.">
+  <meta property="og:title" content="Ossatura — Arquitetura de Software e Risco para Sistemas Críticos">
+  <meta property="og:description" content="Decisões de arquitetura de software para sistemas que não podem falhar.">
+  <meta property="og:type" content="website">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy:       #0F1E2E;
+      --navy2:      #162437;
+      --navy3:      #1E3048;
+      --slate:      #2C3E52;
+      --white:      #FFFFFF;
+      --off-white:  #F4F6F8;
+      --blue:       #1B5EAB;
+      --blue-h:     #154C8A;
+      --blue-light: #EBF2FB;
+      --gold:       #C9902A;
+      --gold-light: #FDF3E1;
+      --text:       #1A2733;
+      --muted:      #5B6E7F;
+      --muted-dk:   #8AAEC8;
+      --border:     #DDE3EA;
+      --border-dk:  #243546;
+      --shadow:     0 1px 3px rgba(15,30,46,0.08), 0 4px 16px rgba(15,30,46,0.06);
+    }
+
+    html { scroll-behavior: smooth; font-size: 16px; }
+
+    body {
+      background: var(--white);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Utilities ── */
+    .wrap { width: min(1200px, 100% - 48px); margin-inline: auto; }
+    .eyebrow {
+      color: var(--blue);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+    .eyebrow--gold  { color: var(--gold); }
+    .eyebrow--light { color: var(--muted-dk); }
+
+    /* ── Header ── */
+    .header {
+      position: fixed;
+      inset-block-start: 0;
+      inset-inline: 0;
+      z-index: 100;
+      background: var(--navy);
+      border-bottom: 1px solid var(--border-dk);
+      transition: box-shadow 0.3s;
+    }
+    .header.scrolled { box-shadow: 0 2px 16px rgba(0,0,0,0.25); }
+    .header__inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-block: 18px;
+    }
+    .logo {
+      color: var(--white);
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      text-decoration: none;
+    }
+    .logo span { color: #5DA8D8; }
+    .nav { display: flex; align-items: center; gap: 32px; }
+    .nav__links { display: flex; gap: 24px; list-style: none; }
+    .nav__links a {
+      color: rgba(255,255,255,0.65);
+      font-size: 0.8rem;
+      font-weight: 400;
+      text-decoration: none;
+      letter-spacing: 0.02em;
+      transition: color 0.2s;
+    }
+    .nav__links a:hover { color: var(--white); }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+      font-size: 0.76rem;
+      letter-spacing: 0.07em;
+      text-decoration: none;
+      text-transform: uppercase;
+      transition: background 0.2s, color 0.2s, border-color 0.2s;
+      cursor: pointer;
+      border: 1px solid transparent;
+    }
+    .btn--primary {
+      background: var(--blue);
+      color: var(--white);
+      padding: 11px 22px;
+      border-color: var(--blue);
+    }
+    .btn--primary:hover { background: var(--blue-h); border-color: var(--blue-h); }
+    .btn--outline {
+      background: transparent;
+      color: var(--white);
+      padding: 10px 20px;
+      border-color: rgba(255,255,255,0.3);
+    }
+    .btn--outline:hover { border-color: rgba(255,255,255,0.7); }
+
+    /* hamburger */
+    .nav-toggle {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+    }
+    .nav-toggle span {
+      display: block;
+      width: 22px;
+      height: 2px;
+      background: var(--white);
+      transition: transform 0.25s, opacity 0.25s;
+    }
+    .nav-toggle.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .nav-toggle.open span:nth-child(2) { opacity: 0; }
+    .nav-toggle.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    /* ── Hero ── */
+    .hero {
+      background-color: var(--navy);
+      background-image: url('https://images.unsplash.com/photo-1486325212027-8081e485255e?auto=format&fit=crop&w=1920&q=80');
+      background-size: cover;
+      background-position: center 40%;
+      background-attachment: fixed;
+      min-height: 100svh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding-block: 140px 100px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(to right, rgba(10,18,30,0.72) 30%, rgba(10,18,30,0.38) 100%),
+        linear-gradient(to bottom, rgba(10,18,30,0.15) 0%, rgba(10,18,30,0.3) 100%);
+      pointer-events: none;
+    }
+    .hero::after {
+      content: '';
+      position: absolute;
+      right: 0; top: 0; bottom: 0;
+      width: 38%;
+      background: linear-gradient(to right, transparent, rgba(27,94,171,0.06));
+      pointer-events: none;
+    }
+    .hero__grid {
+      display: grid;
+      grid-template-columns: 1fr 0.42fr;
+      gap: 80px;
+      align-items: center;
+      position: relative;
+    }
+    .hero__eyebrow { margin-bottom: 20px; }
+    .hero__title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.4rem, 5vw, 4rem);
+      font-weight: 700;
+      line-height: 1.1;
+      letter-spacing: -0.025em;
+      color: var(--white);
+      margin-bottom: 24px;
+    }
+    .hero__title em { font-style: italic; color: #8FC6E0; }
+    .hero__lead {
+      color: var(--muted-dk);
+      font-size: clamp(0.95rem, 1.4vw, 1.1rem);
+      font-weight: 300;
+      line-height: 1.7;
+      max-width: 520px;
+      margin-bottom: 40px;
+    }
+    .hero__actions { display: flex; gap: 12px; flex-wrap: wrap; }
+    .hero__aside { display: flex; flex-direction: column; gap: 0; }
+    .hero__stat {
+      border-left: 2px solid var(--border-dk);
+      padding: 20px 0 20px 24px;
+      transition: border-color 0.2s;
+    }
+    .hero__stat:hover { border-left-color: var(--blue); }
+    .hero__stat strong {
+      display: block;
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 3.2vw, 2.6rem);
+      font-weight: 700;
+      letter-spacing: -0.04em;
+      color: var(--white);
+      line-height: 1;
+    }
+    .hero__stat span {
+      color: var(--muted-dk);
+      font-size: 0.76rem;
+      font-weight: 400;
+      margin-top: 5px;
+      display: block;
+    }
+    .hero__scroll {
+      position: absolute;
+      bottom: 36px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      color: rgba(255,255,255,0.3);
+      font-size: 0.62rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+    .hero__scroll::after {
+      content: '';
+      display: block;
+      width: 1px;
+      height: 36px;
+      background: linear-gradient(to bottom, rgba(255,255,255,0.25), transparent);
+    }
+
+    /* ── Section commons ── */
+    section { padding-block: 96px; }
+    .section-label { margin-bottom: 14px; }
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.85rem, 3.5vw, 2.75rem);
+      font-weight: 700;
+      line-height: 1.12;
+      letter-spacing: -0.025em;
+      color: var(--text);
+    }
+    .section-title--light { color: var(--white); }
+    .section-head {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      margin-bottom: 56px;
+      align-items: end;
+    }
+    .section-head__note {
+      color: var(--muted);
+      font-size: 0.88rem;
+      line-height: 1.7;
+      align-self: end;
+      padding-bottom: 4px;
+    }
+    .section-head__note--dk { color: var(--muted-dk); }
+
+    /* ── Clientes ── */
+    .clientes {
+      background: var(--white);
+      padding-block: 56px;
+      border-bottom: 1px solid var(--border);
+    }
+    .clientes__label {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+    .clientes__grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 40px 0;
+    }
+    .cliente-item {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 60px;
+    }
+    .cliente-item:hover { background: none; }
+    @media (max-width: 680px) {
+      .clientes__grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    .cliente-item img {
+      height: 40px;
+      width: 140px;
+      object-fit: contain;
+      filter: grayscale(100%) opacity(0.5);
+      transition: filter 0.3s;
+    }
+    .cliente-item:hover img { filter: grayscale(0%) opacity(1); }
+    .cliente-txt {
+      font-size: 1rem;
+      font-weight: 700;
+      color: rgba(44,62,82,0.45);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-family: 'Inter', sans-serif;
+      transition: color 0.2s;
+    }
+    .cliente-item:hover .cliente-txt { color: var(--blue); }
+    @media (max-width: 680px) {
+      .clientes__grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    /* ── Divider line ── */
+    .section-rule {
+      display: block;
+      width: 40px;
+      height: 2px;
+      background: var(--blue);
+      margin-bottom: 20px;
+    }
+
+    /* ── Tese ── */
+    .tese { background: var(--navy2); }
+    .tese__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border-dk); }
+    .tese__card {
+      background: var(--navy2);
+      padding: 44px 36px;
+      transition: background 0.2s;
+    }
+    .tese__card:hover { background: var(--navy3); }
+    .tese__num {
+      color: var(--blue);
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      margin-bottom: 28px;
+      display: block;
+    }
+    .tese__card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--white);
+      line-height: 1.25;
+      margin-bottom: 14px;
+    }
+    .tese__card p { color: var(--muted-dk); font-size: 0.87rem; line-height: 1.75; }
+
+    /* ── Serviços ── */
+    .servicos { background: var(--off-white); }
+    .servicos__grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+    .servico {
+      background: var(--white);
+      border: 1px solid var(--border);
+      padding: 40px 36px;
+      display: flex;
+      flex-direction: column;
+      box-shadow: var(--shadow);
+      transition: box-shadow 0.2s, transform 0.2s;
+      position: relative;
+    }
+    .servico:hover { box-shadow: 0 4px 24px rgba(15,30,46,0.12); transform: translateY(-2px); }
+    .servico__accent {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: var(--blue);
+    }
+    .servico__accent--gold { background: var(--gold); }
+    .servico__accent--slate { background: var(--slate); }
+    .servico__accent--navy { background: var(--navy3); }
+    .servico__tag {
+      color: var(--muted);
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+    .servico h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.45rem;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.2;
+      margin-bottom: 12px;
+    }
+    .servico__price {
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: var(--text);
+      letter-spacing: -0.02em;
+      margin-bottom: 16px;
+    }
+    .servico__price span { font-size: 0.76rem; font-weight: 400; color: var(--muted); }
+    .servico p { color: var(--muted); font-size: 0.87rem; line-height: 1.75; flex: 1; }
+    .servico__footer {
+      margin-top: 28px;
+      padding-top: 18px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .servico__detail { color: var(--muted); font-size: 0.74rem; }
+    .servico__link {
+      color: var(--blue);
+      font-size: 0.74rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .servico__link:hover { color: var(--blue-h); }
+    .servico__badge {
+      display: inline-block;
+      background: var(--blue-light);
+      color: var(--blue);
+      border: 1px solid #C3D8F0;
+      font-size: 0.6rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      padding: 3px 8px;
+      text-transform: uppercase;
+      margin-top: 10px;
+    }
+
+    /* ── Método ── */
+    .metodo { background: var(--navy); }
+    .metodo__steps {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+      margin-top: 56px;
+      border: 1px solid var(--border-dk);
+    }
+    .metodo__step {
+      padding: 36px 28px;
+      border-right: 1px solid var(--border-dk);
+      transition: background 0.2s;
+    }
+    .metodo__step:last-child { border-right: none; }
+    .metodo__step:hover { background: var(--navy2); }
+    .metodo__n {
+      color: var(--blue);
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      margin-bottom: 24px;
+      display: block;
+    }
+    .metodo__step h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 12px;
+    }
+    .metodo__step p { color: var(--muted-dk); font-size: 0.84rem; line-height: 1.72; }
+
+    /* ── Sobre ── */
+    .sobre { background: var(--white); }
+    .sobre__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; }
+    .sobre__tag { margin-bottom: 14px; }
+    .sobre__title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.75rem, 3vw, 2.5rem);
+      font-weight: 700;
+      line-height: 1.15;
+      letter-spacing: -0.025em;
+      color: var(--text);
+      margin-bottom: 22px;
+    }
+    .sobre__text { color: var(--muted); font-size: 0.93rem; line-height: 1.8; }
+    .sobre__text + .sobre__text { margin-top: 14px; }
+    .sobre__numbers {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      margin-top: 40px;
+    }
+    .sobre__num {
+      background: var(--off-white);
+      padding: 24px 22px;
+    }
+    .sobre__num strong {
+      display: block;
+      font-family: 'Playfair Display', serif;
+      font-size: 2.2rem;
+      font-weight: 700;
+      letter-spacing: -0.04em;
+      color: var(--navy);
+      line-height: 1;
+    }
+    .sobre__num span { color: var(--muted); font-size: 0.76rem; margin-top: 5px; display: block; }
+    .sobre__features { display: flex; flex-direction: column; gap: 0; }
+    .sobre__feature {
+      display: flex;
+      gap: 16px;
+      padding: 18px 0;
+      border-bottom: 1px solid var(--border);
+      align-items: flex-start;
+    }
+    .sobre__feature:first-child { border-top: 1px solid var(--border); }
+    .sobre__feature__icon {
+      width: 30px;
+      height: 30px;
+      background: var(--blue-light);
+      border: 1px solid #C3D8F0;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--blue);
+      font-size: 0.65rem;
+      font-weight: 700;
+    }
+    .sobre__feature__body strong {
+      display: block;
+      font-size: 0.86rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 3px;
+    }
+    .sobre__feature__body span { color: var(--muted); font-size: 0.81rem; }
+
+    /* ── Contato ── */
+    .contato {
+      background: var(--navy2);
+      padding-block: 112px;
+    }
+    .contato__inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: start;
+    }
+    .contato__title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.85rem, 3.2vw, 2.7rem);
+      font-weight: 700;
+      line-height: 1.12;
+      letter-spacing: -0.025em;
+      color: var(--white);
+      margin-bottom: 18px;
+    }
+    .contato__lead { color: var(--muted-dk); font-size: 0.92rem; line-height: 1.78; margin-bottom: 32px; }
+    .contato__form { display: flex; flex-direction: column; gap: 14px; }
+    .form-group { display: flex; flex-direction: column; gap: 5px; }
+    .form-group label {
+      color: var(--muted-dk);
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border-dk);
+      color: var(--white);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.88rem;
+      padding: 12px 14px;
+      transition: border-color 0.2s, background 0.2s;
+      outline: none;
+      width: 100%;
+      -webkit-appearance: none;
+      border-radius: 0;
+    }
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+      border-color: #5DA8D8;
+      background: rgba(255,255,255,0.08);
+    }
+    .form-group input::placeholder,
+    .form-group textarea::placeholder { color: rgba(255,255,255,0.25); }
+    .form-group select option { background: var(--navy2); color: var(--white); }
+    .form-group textarea { resize: vertical; min-height: 110px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .contato__form .btn { width: 100%; justify-content: center; padding: 14px; font-size: 0.8rem; margin-top: 4px; }
+    .contato__info { margin-top: 40px; display: flex; flex-direction: column; gap: 18px; }
+    .contato__info-item { display: flex; gap: 14px; align-items: flex-start; }
+    .contato__info-item__icon {
+      width: 34px;
+      height: 34px;
+      border: 1px solid var(--border-dk);
+      background: rgba(255,255,255,0.04);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .contato__info-item__icon svg { width: 14px; height: 14px; stroke: #5DA8D8; fill: none; stroke-width: 1.8; }
+    .contato__info-item strong { display: block; color: var(--white); font-size: 0.8rem; font-weight: 500; }
+    .contato__info-item span { color: var(--muted-dk); font-size: 0.78rem; }
+
+    /* ── Footer ── */
+    footer {
+      background: var(--navy);
+      border-top: 1px solid var(--border-dk);
+      padding-block: 36px;
+    }
+    .footer__inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+    .footer__logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--white);
+      text-decoration: none;
+    }
+    .footer__logo span { color: #5DA8D8; }
+    .footer__copy { color: rgba(255,255,255,0.35); font-size: 0.74rem; }
+    .footer__links { display: flex; gap: 24px; }
+    .footer__links a { color: rgba(255,255,255,0.4); font-size: 0.74rem; text-decoration: none; transition: color 0.2s; }
+    .footer__links a:hover { color: rgba(255,255,255,0.8); }
+
+    /* ── Responsive ── */
+    @media (max-width: 960px) {
+      .hero__grid { grid-template-columns: 1fr; gap: 52px; }
+      .hero__aside { flex-direction: row; flex-wrap: wrap; gap: 0; }
+      .hero__stat { flex: 1; min-width: 140px; }
+      .hero__scroll { display: none; }
+      .section-head { grid-template-columns: 1fr; gap: 18px; }
+      .tese__grid { grid-template-columns: 1fr; }
+      .servicos__grid { grid-template-columns: 1fr; }
+      .metodo__steps { grid-template-columns: repeat(2, 1fr); }
+      .metodo__step { border-right: none; border-bottom: 1px solid var(--border-dk); }
+      .metodo__step:nth-child(odd) { border-right: 1px solid var(--border-dk); }
+      .metodo__step:last-child { border-bottom: none; }
+      .sobre__grid { grid-template-columns: 1fr; gap: 48px; }
+      .contato__inner { grid-template-columns: 1fr; gap: 48px; }
+      .footer__inner { flex-direction: column; align-items: flex-start; gap: 14px; }
+    }
+
+    @media (max-width: 680px) {
+      section { padding-block: 68px; }
+      .nav__links { display: none; }
+      .nav > .btn { display: none; }
+      .nav-toggle { display: flex; }
+      .nav.open .nav__links {
+        display: flex;
+        flex-direction: column;
+        position: fixed;
+        inset: 68px 0 0;
+        background: var(--navy);
+        padding: 32px 24px;
+        gap: 24px;
+        border-top: 1px solid var(--border-dk);
+      }
+      .nav.open .nav__links a { font-size: 1rem; }
+      .metodo__steps { grid-template-columns: 1fr; }
+      .sobre__numbers { grid-template-columns: 1fr 1fr; }
+      .form-row { grid-template-columns: 1fr; }
+      .hero__actions { flex-direction: column; }
+      .hero__actions .btn { text-align: center; justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="header" id="header">
+    <div class="wrap">
+      <div class="header__inner">
+        <a href="#inicio" class="logo">Ossa<span>tura</span></a>
+        <nav class="nav" id="nav">
+          <ul class="nav__links">
+            <li><a href="#servicos">Serviços</a></li>
+            <li><a href="#metodo">Método</a></li>
+            <li><a href="#sobre">Sobre</a></li>
+            <li><a href="#contato">Contato</a></li>
+          </ul>
+          <a href="#contato" class="btn btn--primary">Falar com a Ossatura</a>
+        </nav>
+        <button class="nav-toggle" id="navToggle" aria-label="Menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero" id="inicio">
+    <div class="wrap">
+      <div class="hero__grid">
+        <div>
+          <p class="eyebrow hero__eyebrow">Arquitetura de Software · Risco Técnico · Modernização</p>
+          <h1 class="hero__title">
+            Sistemas críticos<br>não podem falhar.<br>
+            <em>As decisões de software<br>por trás deles também não.</em>
+          </h1>
+          <p class="hero__lead">
+            Consultoria independente de arquitetura de software para líderes que precisam
+            reduzir risco técnico, modernizar sistemas legados e tomar decisões de tecnologia
+            com clareza — antes que o custo de errar seja alto demais.
+          </p>
+          <div class="hero__actions">
+            <a href="#contato" class="btn btn--primary">Agendar uma conversa</a>
+            <a href="#servicos" class="btn btn--outline">Ver serviços</a>
+          </div>
+        </div>
+        <div class="hero__aside">
+          <div class="hero__stat">
+            <strong>30+</strong>
+            <span>anos em tecnologia para operações críticas</span>
+          </div>
+          <div class="hero__stat">
+            <strong>4</strong>
+            <span>frentes de atuação com escopo fechado</span>
+          </div>
+          <div class="hero__stat">
+            <strong>90</strong>
+            <span>dias para validar o primeiro resultado</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="hero__scroll">rolar</div>
+  </section>
+
+  <!-- CLIENTES -->
+  <section class="clientes">
+    <div class="wrap">
+      <p class="eyebrow clientes__label">Empresas atendidas</p>
+      <div class="clientes__grid">
+        <div class="cliente-item"><img src="img/clientes/vr.png"          alt="VR Benefícios"  title="VR Benefícios"></div>
+        <div class="cliente-item"><img src="img/clientes/portoseguro.svg" alt="Porto Seguro"   title="Porto Seguro"></div>
+        <div class="cliente-item"><img src="img/clientes/dpsp.png"        alt="Grupo DPSP"     title="Grupo DPSP"></div>
+        <div class="cliente-item"><img src="img/clientes/sulamerica.svg" alt="SulAmérica"  title="SulAmérica"></div>
+        <div class="cliente-item"><img src="img/clientes/agrotools.png" alt="Agrotools"   title="Agrotools"></div>
+        <div class="cliente-item"><img src="img/clientes/cielo.svg"     alt="Cielo"       title="Cielo"></div>
+        <div class="cliente-item"><img src="img/clientes/linx.png"      alt="Linx"        title="Linx"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESE -->
+  <section class="tese" id="tese">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow eyebrow--gold section-label">Por que a Ossatura</p>
+          <h2 class="section-title section-title--light">Três problemas de software que nenhuma stack nova resolve sozinha.</h2>
+        </div>
+        <p class="section-head__note section-head__note--dark">
+          Quando o sistema cresce, os riscos ficam escondidos nos lugares que os engenheiros mais novos não conhecem.
+        </p>
+      </div>
+      <div class="tese__grid">
+        <div class="tese__card">
+          <span class="tese__num">01 / Disponibilidade</span>
+          <h3>Interrupção custa mais do que parece</h3>
+          <p>Sistemas críticos exigem resiliência, observabilidade e planos de recuperação que sobrevivam ao incidente real — não só ao cenário de teste.</p>
+        </div>
+        <div class="tese__card">
+          <span class="tese__num">02 / Legado</span>
+          <h3>Modernizar sem paralisar a operação</h3>
+          <p>A migração de sistemas críticos precisa preservar integridade de dados, integrações e obrigações regulatórias. Reescrever do zero raramente é a resposta.</p>
+        </div>
+        <div class="tese__card">
+          <span class="tese__num">03 / Contexto</span>
+          <h3>Domínio que não se aprende só com código</h3>
+          <p>Integrações de missão crítica, segurança, compliance e domínio regulatório não se resolvem com uma stack moderna conduzida por quem não conhece o terreno.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVIÇOS -->
+  <section class="servicos" id="servicos">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow section-label">O que fazemos</p>
+          <h2 class="section-title">Consultoria de software com escopo, prazo e resultado definidos.</h2>
+        </div>
+        <p class="section-head__note">
+          Não vendemos horas de desenvolvimento. Vendemos decisões técnicas com responsabilidade clara e entregável executivo.
+        </p>
+      </div>
+      <div class="servicos__grid">
+
+        <div class="servico">
+          <div class="servico__accent"></div>
+          <span class="servico__tag">Projeto fechado · Porta de entrada</span>
+          <h3>Diagnóstico de Resiliência</h3>
+          <div class="servico__price">Escopo e investimento <span>definidos por projeto</span></div>
+          <p>Mapa de riscos, avaliação de arquitetura e roadmap executivo de 90 dias. Em 2 a 4 semanas você tem clareza sobre o que está em risco, qual a prioridade e o que fazer primeiro.</p>
+          <div class="servico__footer">
+            <span class="servico__detail">Prazo: 2 a 4 semanas</span>
+            <a href="#contato" class="servico__link">Solicitar →</a>
+          </div>
+        </div>
+
+        <div class="servico">
+          <div class="servico__accent servico__accent--gold"></div>
+          <span class="servico__tag">Projeto fechado</span>
+          <h3>Tech Due Diligence</h3>
+          <div class="servico__price">Escopo e investimento <span>definidos por projeto</span></div>
+          <p>Parecer independente sobre produto, arquitetura, time, processo e passivos técnicos. Para fundos de investimento e compradores que precisam de uma visão honesta antes de decidir.</p>
+          <div class="servico__footer">
+            <span class="servico__detail">Prazo: 2 a 3 semanas</span>
+            <a href="#contato" class="servico__link">Solicitar →</a>
+          </div>
+        </div>
+
+        <div class="servico">
+          <div class="servico__accent servico__accent--slate"></div>
+          <span class="servico__tag">Projeto / Manutenção preventiva</span>
+          <h3>Legacy Code Rescue</h3>
+          <div class="servico__price">Escopo e investimento <span>definidos por projeto</span></div>
+          <p>Diagnóstico e plano de saída segura para sistemas COBOL, mainframe ou stacks críticas fora de suporte em produção. Pouquíssimos profissionais conhecem esse terreno.</p>
+          <div class="servico__footer">
+            <span class="servico__detail">Diferencial exclusivo</span>
+            <a href="#contato" class="servico__link">Solicitar →</a>
+          </div>
+          <span class="servico__badge">Diferencial exclusivo</span>
+        </div>
+
+        <div class="servico">
+          <div class="servico__accent servico__accent--navy"></div>
+          <span class="servico__tag">Advisory mensal recorrente</span>
+          <h3>Arquitetura Fracionada</h3>
+          <div class="servico__price">Retainer mensal <span>com escopo acordado</span></div>
+          <p>Apoio executivo contínuo para decisões de arquitetura, revisão de roadmap, governança de risco e desenvolvimento de liderança técnica. Para CTOs e CEOs em tração.</p>
+          <div class="servico__footer">
+            <span class="servico__detail">Contrato mínimo: 3 meses</span>
+            <a href="#contato" class="servico__link">Solicitar →</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- MÉTODO -->
+  <section class="metodo" id="metodo">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow eyebrow--gold section-label">Como trabalhamos</p>
+          <h2 class="section-title section-title--light">Do risco técnico identificado à decisão de software executável.</h2>
+        </div>
+        <p class="section-head__note section-head__note--dark">
+          Cada intervenção segue um método estruturado. Sem entrega vaga, sem escopo aberto.
+        </p>
+      </div>
+      <div class="metodo__steps">
+        <div class="metodo__step">
+          <span class="metodo__n">01</span>
+          <h3>Diagnosticar</h3>
+          <p>Entrevistas, evidências, arquitetura, operação e acessos. Entendemos o sistema como ele realmente é — não como está documentado.</p>
+        </div>
+        <div class="metodo__step">
+          <span class="metodo__n">02</span>
+          <h3>Priorizar</h3>
+          <p>Riscos classificados por impacto, urgência, esforço e dependência. Você sabe exatamente o que fazer primeiro e por quê.</p>
+        </div>
+        <div class="metodo__step">
+          <span class="metodo__n">03</span>
+          <h3>Decidir</h3>
+          <p>Leitura executiva para alinhar tecnologia, negócio e governança. Cada decisão tem contexto, opções e consequências explícitas.</p>
+        </div>
+        <div class="metodo__step">
+          <span class="metodo__n">04</span>
+          <h3>Acompanhar</h3>
+          <p>Roadmap com responsáveis, marcos e rituais para transformar achados em ação — e não deixar o diagnóstico na gaveta.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SOBRE -->
+  <section class="sobre" id="sobre">
+    <div class="wrap">
+      <div class="sobre__grid">
+        <div>
+          <p class="eyebrow sobre__tag">Sobre a Ossatura</p>
+          <h2 class="sobre__title">Décadas de operação real. Não teoria de arquitetura de software.</h2>
+          <p class="sobre__text">
+            A Ossatura nasceu da constatação de que decisões técnicas de alto impacto raramente chegam
+            ao decisor certo — na hora certa e com o contexto necessário. Engenheiros sêniores são
+            deslocados para escrever código, enquanto arquiteturas críticas crescem sem revisão.
+          </p>
+          <p class="sobre__text">
+            Com mais de 30 anos de experiência em tecnologia para operações críticas — incluindo
+            serviços financeiros, pagamentos, benefícios e varejo de alta escala — oferecemos o que
+            nenhuma ferramenta ou framework substitui: <strong>julgamento técnico formado no campo.</strong>
+          </p>
+          <div class="sobre__numbers">
+            <div class="sobre__num">
+              <strong>30+</strong>
+              <span>anos de experiência em sistemas críticos</span>
+            </div>
+            <div class="sobre__num">
+              <strong>4</strong>
+              <span>ofertas com escopo e resultado definidos</span>
+            </div>
+            <div class="sobre__num">
+              <strong>2</strong>
+              <span>retainers simultâneos — foco total no cliente</span>
+            </div>
+            <div class="sobre__num">
+              <strong>90</strong>
+              <span>dias para validar o primeiro resultado</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="sobre__features">
+            <div class="sobre__feature">
+              <div class="sobre__feature__icon">01</div>
+              <div class="sobre__feature__body">
+                <strong>Independência como princípio</strong>
+                <span>Não vendemos implementação. Isso nos permite recomendar o que é certo para o cliente, não o que é mais conveniente para nós.</span>
+              </div>
+            </div>
+            <div class="sobre__feature">
+              <div class="sobre__feature__icon">02</div>
+              <div class="sobre__feature__body">
+                <strong>Escopo fechado, responsabilidade clara</strong>
+                <span>Todo contrato define acesso, premissas, entregáveis, limites de responsabilidade e exclusões. A consultoria recomenda; o cliente executa.</span>
+              </div>
+            </div>
+            <div class="sobre__feature">
+              <div class="sobre__feature__icon">03</div>
+              <div class="sobre__feature__body">
+                <strong>Confidencialidade por padrão</strong>
+                <span>NDA antes do primeiro acesso. Princípio de mínimo privilégio. Descarte documentado de dados conforme LGPD.</span>
+              </div>
+            </div>
+            <div class="sobre__feature">
+              <div class="sobre__feature__icon">04</div>
+              <div class="sobre__feature__body">
+                <strong>Capacidade limitada, intencionalmente</strong>
+                <span>Nunca mais de dois retainers simultâneos. Cada cliente recebe atenção integral, não atenção dividida.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTATO -->
+  <section class="contato" id="contato">
+    <div class="wrap">
+      <div class="contato__inner">
+        <div>
+          <p class="eyebrow eyebrow--mint section-label">Falar com a Ossatura</p>
+          <h2 class="contato__title">O risco técnico está visível para quem precisa decidir?</h2>
+          <p class="contato__lead">
+            Uma conversa inicial de 30 minutos permite entender o contexto, o evento disparador e se
+            um diagnóstico independente pode acelerar a próxima decisão. Sem compromisso.
+          </p>
+          <div class="contato__info">
+            <div class="contato__info-item">
+              <div class="contato__info-item__icon">
+                <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+              </div>
+              <div>
+                <strong>Email</strong>
+                <span>contato@ossatura.com.br</span>
+              </div>
+            </div>
+            <div class="contato__info-item">
+              <div class="contato__info-item__icon">
+                <svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+              </div>
+              <div>
+                <strong>LinkedIn</strong>
+                <span>linkedin.com/company/ossatura</span>
+              </div>
+            </div>
+            <div class="contato__info-item">
+              <div class="contato__info-item__icon">
+                <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              </div>
+              <div>
+                <strong>Resposta</strong>
+                <span>Em até 1 dia útil para primeiros contatos qualificados.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <form class="contato__form" action="mailto:contato@ossatura.com.br" method="POST" enctype="text/plain">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="nome">Nome</label>
+              <input type="text" id="nome" name="nome" placeholder="Seu nome completo" required>
+            </div>
+            <div class="form-group">
+              <label for="empresa">Empresa</label>
+              <input type="text" id="empresa" name="empresa" placeholder="Nome da empresa">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="email">Email profissional</label>
+            <input type="email" id="email" name="email" placeholder="voce@empresa.com" required>
+          </div>
+          <div class="form-group">
+            <label for="servico">Serviço de interesse</label>
+            <select id="servico" name="servico">
+              <option value="" disabled selected>Selecione um serviço</option>
+              <option value="diagnostico">Diagnóstico de Resiliência</option>
+              <option value="diligencia">Tech Due Diligence</option>
+              <option value="legacy">Legacy Code Rescue</option>
+              <option value="advisory">Arquitetura Fracionada</option>
+              <option value="outro">Ainda não sei — quero conversar</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="contexto">Contexto (opcional)</label>
+            <textarea id="contexto" name="contexto" placeholder="Descreva brevemente o desafio ou evento disparador..."></textarea>
+          </div>
+          <button type="submit" class="btn btn--primary">Enviar mensagem</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="wrap">
+      <div class="footer__inner">
+        <a href="#inicio" class="footer__logo">Ossa<span>tura</span></a>
+        <p class="footer__copy">© <span id="year"></span> Primety. Arquitetura e risco para sistemas críticos.</p>
+        <div class="footer__links">
+          <a href="#servicos">Serviços</a>
+          <a href="#metodo">Método</a>
+          <a href="#sobre">Sobre</a>
+          <a href="#contato">Contato</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Copyright year
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Header scroll effect
+    const header = document.getElementById('header');
+    window.addEventListener('scroll', () => {
+      header.classList.toggle('scrolled', window.scrollY > 60);
+    }, { passive: true });
+
+    // Mobile nav toggle
+    const navToggle = document.getElementById('navToggle');
+    const nav = document.getElementById('nav');
+    navToggle.addEventListener('click', () => {
+      navToggle.classList.toggle('open');
+      nav.classList.toggle('open');
+    });
+
+    // Close mobile nav on link click
+    nav.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        navToggle.classList.remove('open');
+        nav.classList.remove('open');
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Estudo completo de viabilidade para consultoria de arquitetura, modernizacao e risco em servicos financeiros.">
+  <title>Estudo Completo | Ossatura</title>
+  <style>
+    :root {
+      --forest: #102b27;
+      --forest-2: #1f4942;
+      --paper: #f7f3e9;
+      --white: #fffdf7;
+      --line: #d8d1bf;
+      --orange: #df6032;
+      --gold: #e9ba4c;
+      --mint: #b8dfcf;
+      --muted: #536961;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--paper); color: var(--forest); font-family: Georgia, "Times New Roman", serif; line-height: 1.55; margin: 0; }
+    a { color: inherit; }
+    .wrap { margin: 0 auto; width: min(1160px, calc(100% - 40px)); }
+    header { background: var(--forest); color: var(--white); padding: 18px 0; position: sticky; top: 0; z-index: 5; }
+    nav { align-items: center; display: flex; gap: 24px; justify-content: space-between; }
+    .brand { color: var(--mint); font-family: "Courier New", monospace; font-size: .8rem; font-weight: 700; letter-spacing: .11em; text-decoration: none; text-transform: uppercase; }
+    nav ul { display: flex; flex-wrap: wrap; gap: 17px; list-style: none; margin: 0; padding: 0; }
+    nav li { font-family: Arial, sans-serif; font-size: .75rem; }
+    nav a { text-decoration: none; }
+    nav a:hover { color: var(--mint); }
+    .hero { background: var(--forest); color: var(--white); overflow: hidden; padding: 85px 0 70px; position: relative; }
+    .hero::before { border: 1px solid rgba(184, 223, 207, .24); border-radius: 50%; content: ""; height: 640px; position: absolute; right: -210px; top: -190px; width: 640px; }
+    .hero .wrap { position: relative; }
+    .eyebrow { color: var(--orange); font-family: Arial, sans-serif; font-size: .71rem; font-weight: 700; letter-spacing: .13em; margin: 0 0 16px; text-transform: uppercase; }
+    h1, h2, h3 { line-height: 1.07; margin-top: 0; }
+    h1 { font-size: clamp(3rem, 7vw, 6.2rem); letter-spacing: -.05em; margin-bottom: 24px; max-width: 1020px; }
+    h2 { font-size: clamp(2rem, 4vw, 3.35rem); letter-spacing: -.035em; margin-bottom: 23px; }
+    h3 { font-size: 1.2rem; margin-bottom: 9px; }
+    .lead { color: #d3e8df; font-size: clamp(1.12rem, 2vw, 1.43rem); margin: 0; max-width: 760px; }
+    .hero-stats { display: grid; gap: 1px; grid-template-columns: repeat(3, 1fr); margin-top: 54px; max-width: 850px; }
+    .hero-stats div { background: var(--forest-2); padding: 19px; }
+    .hero-stats strong { color: var(--gold); display: block; font-family: Arial, sans-serif; font-size: 1.15rem; }
+    .hero-stats span { color: var(--mint); font-family: Arial, sans-serif; font-size: .74rem; }
+    section { padding: 75px 0; }
+    .dark { background: var(--forest); color: var(--white); }
+    .dark .eyebrow { color: var(--gold); }
+    .dark h2 { color: var(--mint); }
+    .head { display: grid; gap: 34px; grid-template-columns: 1fr 1fr; margin-bottom: 35px; }
+    .head > p:not(.eyebrow) { color: var(--muted); font-size: 1.08rem; margin: 0; padding-top: 8px; }
+    .dark .head > p:not(.eyebrow) { color: #d3e8df; }
+    .grid-3 { display: grid; gap: 18px; grid-template-columns: repeat(3, 1fr); }
+    .card { background: var(--white); border-top: 4px solid var(--orange); padding: 26px; }
+    .card .tag { color: var(--orange); display: block; font-family: Arial, sans-serif; font-size: .7rem; font-weight: 700; letter-spacing: .1em; margin-bottom: 27px; }
+    .card p { color: var(--muted); margin-bottom: 0; }
+    .quote { border-left: 5px solid var(--orange); font-size: clamp(1.45rem, 3vw, 2.3rem); line-height: 1.25; margin: 0; max-width: 900px; padding: 7px 0 7px 26px; }
+    .callout { background: var(--mint); padding: 28px; }
+    .callout h3 { margin-bottom: 7px; }
+    .callout p { margin-bottom: 0; }
+    .two { display: grid; gap: 55px; grid-template-columns: .82fr 1.18fr; }
+    .list { list-style: none; margin: 0; padding: 0; }
+    .list li { border-bottom: 1px solid var(--line); padding: 15px 0 15px 27px; position: relative; }
+    .list li::before { color: var(--orange); content: "+"; font-family: Arial, sans-serif; font-weight: 700; left: 0; position: absolute; }
+    .dark .list li { border-color: rgba(255,255,255,.2); }
+    .table-wrap { overflow-x: auto; }
+    table { border-collapse: collapse; font-size: .94rem; min-width: 690px; width: 100%; }
+    th { color: var(--orange); font-family: Arial, sans-serif; font-size: .7rem; letter-spacing: .09em; text-align: left; text-transform: uppercase; }
+    th, td { border-bottom: 1px solid var(--line); padding: 15px 13px; vertical-align: top; }
+    th:first-child, td:first-child { padding-left: 0; }
+    .dark th, .dark td { border-color: rgba(255,255,255,.19); }
+    .dark th { color: var(--gold); }
+    .offers { display: grid; grid-template-columns: repeat(4, 1fr); }
+    .offer { border: 1px solid var(--line); min-height: 312px; padding: 25px; }
+    .offer:first-child { background: var(--mint); }
+    .offer .label { color: var(--orange); font-family: Arial, sans-serif; font-size: .7rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+    .offer .price { display: block; font-family: Arial, sans-serif; font-size: 1.4rem; font-weight: 700; margin: 26px 0 7px; }
+    .offer p { color: var(--muted); margin-bottom: 0; }
+    .steps { counter-reset: item; display: grid; gap: 18px; grid-template-columns: repeat(3, 1fr); }
+    .step { border-top: 2px solid var(--forest); padding-top: 21px; }
+    .step::before { color: var(--orange); content: "0" counter(item); counter-increment: item; font-family: Arial, sans-serif; font-size: .72rem; font-weight: 700; letter-spacing: .13em; }
+    .step h3 { margin-top: 18px; }
+    .step p { color: var(--muted); margin-bottom: 0; }
+    .scenarios { display: grid; gap: 18px; grid-template-columns: repeat(3, 1fr); }
+    .scenario { background: var(--forest-2); border-top: 3px solid var(--gold); padding: 26px; }
+    .scenario span { color: var(--mint); font-family: Arial, sans-serif; font-size: .75rem; }
+    .scenario p { color: #d3e8df; min-height: 48px; }
+    .scenario strong { color: var(--gold); display: block; font-family: Arial, sans-serif; font-size: 1.9rem; letter-spacing: -.05em; }
+    .metric { background: var(--orange); padding: 30px; }
+    .metric strong { display: block; font-family: Arial, sans-serif; font-size: clamp(3.4rem, 6vw, 5.4rem); letter-spacing: -.08em; line-height: .9; }
+    .metric p { margin: 15px 0 0; }
+    details { border-bottom: 1px solid var(--line); }
+    summary { cursor: pointer; font-family: Arial, sans-serif; font-size: .98rem; font-weight: 700; list-style: none; padding: 18px 28px 18px 0; position: relative; }
+    summary::after { color: var(--orange); content: "+"; font-size: 1.35rem; position: absolute; right: 4px; top: 10px; }
+    details[open] summary::after { content: "-"; }
+    details p, details ul { color: var(--muted); margin: 0 0 19px; }
+    details ul { padding-left: 18px; }
+    .final { background: var(--mint); padding: 74px 0; }
+    .final p { font-size: 1.18rem; max-width: 760px; }
+    .button { background: var(--forest); color: var(--white); display: inline-block; font-family: Arial, sans-serif; font-size: .78rem; font-weight: 700; letter-spacing: .06em; margin-top: 10px; padding: 14px 18px; text-decoration: none; text-transform: uppercase; }
+    .button:hover { background: var(--orange); }
+    footer { background: #0b1e1a; color: #b9d2c8; font-family: Arial, sans-serif; font-size: .77rem; padding: 27px 0; }
+    @media (max-width: 850px) { .grid-3, .scenarios { grid-template-columns: 1fr; } .offers { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 650px) { .wrap { width: min(100% - 30px, 1160px); } nav { align-items: flex-start; flex-direction: column; } .hero { padding: 67px 0 55px; } section { padding: 55px 0; } .head, .two, .steps, .offers, .hero-stats { grid-template-columns: 1fr; } .offer { min-height: auto; } }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="wrap" aria-label="Navegacao principal">
+      <a class="brand" href="#inicio">Ossatura</a>
+      <ul><li><a href="#mercado">Mercado</a></li><li><a href="#ofertas">Ofertas</a></li><li><a href="#financas">Financas</a></li><li><a href="#plano">Plano</a></li></ul>
+    </nav>
+  </header>
+  <main>
+    <section class="hero" id="inicio">
+      <div class="wrap">
+        <p class="eyebrow">Estudo completo de viabilidade</p>
+        <h1>Uma pratica premium para decisoes tecnicas que importam.</h1>
+        <p class="lead">Consultoria independente de arquitetura, modernizacao e risco para servicos financeiros. Um negocio enxuto, de alta especializacao e validado por contratos pagos.</p>
+        <div class="hero-stats"><div><strong>90 dias</strong><span>para validacao comercial</span></div><div><strong>12 meses</strong><span>para implantacao da pratica</span></div><div><strong>36 meses</strong><span>de horizonte de consolidacao</span></div></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="wrap">
+        <div class="head"><div><p class="eyebrow">01 / Decisao</p><h2>A recomendacao e validar antes de escalar.</h2></div><p>O primeiro objetivo nao e criar uma grande estrutura nem construir software. E obter evidencia de compra para duas ofertas fechadas: Diagnostico de Resiliencia e Risco e Tech Due Diligence.</p></div>
+        <div class="grid-3"><article class="card"><span class="tag">Tese</span><h3>Risco explicito vale premio</h3><p>Experiencia senior se torna valiosa ao converter incerteza tecnica em prioridades, decisoes e governanca compreensiveis pelo negocio.</p></article><article class="card"><span class="tag">Condicao de avancar</span><h3>Tracao ate o sexto mes</h3><p>Um retainer de R$ 18 mil, ou duas diligencias pagas por trimestre, com pipeline de 90 dias igual a tres vezes a meta.</p></article><article class="card"><span class="tag">Disciplina</span><h3>Baixo custo fixo</h3><p>Evitar equipe permanente e produtos prematuros. Projetos fechados criam prova, caixa e caminho para receita recorrente.</p></article></div>
+      </div>
+    </section>
+
+    <section class="dark"><div class="wrap"><p class="eyebrow">Posicionamento</p><blockquote class="quote">Consultoria independente de arquitetura e risco tecnologico para empresas financeiras que precisam tomar decisoes criticas sem interromper a operacao.</blockquote></div></section>
+
+    <section>
+      <div class="wrap">
+        <div class="head"><div><p class="eyebrow">Experiencia</p><h2>Mais de 30 anos em operacoes criticas.</h2></div><p>Uma credencial unica e clara para decisoes que exigem contexto tecnico, operacional e executivo.</p></div>
+        <div class="callout"><h3>Experiencia que reduz incerteza</h3><p>Mais de 30 anos de experiencia em tecnologia para operacoes criticas, incluindo servicos financeiros, pagamentos, beneficios e varejo de alta escala.</p></div>
+      </div>
+    </section>
+
+    <section id="mercado">
+      <div class="wrap">
+        <div class="head"><div><p class="eyebrow">02 / Problema de mercado</p><h2>Operacao financeira nao separa tecnologia de negocio.</h2></div><p>Falhas de disponibilidade, seguranca, integracao ou dados afetam receita, parceiros, reputacao e continuidade. O comprador busca julgamento confiavel, nao apenas capacidade de desenvolvimento.</p></div>
+        <div class="table-wrap"><table><thead><tr><th>Dor</th><th>Consequencia</th><th>Compra justificavel</th></tr></thead><tbody><tr><td>Indisponibilidade e incidentes</td><td>Perda de receita, suporte, multas e atrito com parceiros</td><td>Resiliencia, continuidade e observabilidade</td></tr><tr><td>Crescimento sobre arquitetura inicial</td><td>Retrabalho, custo de cloud e atraso de produto</td><td>Diagnostico de arquitetura e roadmap</td></tr><tr><td>Investimento em tecnologia</td><td>Passivo tecnico oculto e plano de crescimento irreal</td><td>Tech Due Diligence independente</td></tr><tr><td>Modernizacao de legado</td><td>Ruptura de operacao, dados ou conciliacao</td><td>Arquitetura de transicao e governanca</td></tr><tr><td>Lideranca tecnica incompleta</td><td>Decisoes reativas e pouca clareza para conselho</td><td>Advisory fracionado</td></tr></tbody></table></div>
+      </div>
+    </section>
+
+    <section class="dark">
+      <div class="wrap two"><div><p class="eyebrow">Eventos disparadores</p><h2>Vender no momento de maior urgencia.</h2></div><ul class="list"><li>Rodada de investimento, aquisicao ou due diligence de parceiro.</li><li>Incidente de disponibilidade, seguranca ou conciliacao.</li><li>Exigencia de banco parceiro, auditoria ou cliente corporativo.</li><li>Expansao de produto, volume transacional ou geografia.</li><li>Migracao de plataforma, cloud, dados ou integracoes.</li><li>Troca de CTO ou conselho cobrando plano tecnico.</li></ul></div>
+    </section>
+
+    <section>
+      <div class="wrap">
+        <div class="head"><div><p class="eyebrow">03 / Segmentacao</p><h2>Fundos e fintechs em tracao primeiro.</h2></div><p>O mercado de entrada combina acesso ao decisor, dor clara e possibilidade de escopo fechado. Bancos de medio porte entram como expansao depois da construcao de referencias.</p></div>
+        <div class="table-wrap"><table><thead><tr><th>Segmento</th><th>Aderencia</th><th>Ticket</th><th>Ciclo</th><th>Prioridade</th></tr></thead><tbody><tr><td>Fundos de VC/PE com tese fintech</td><td>Alta</td><td>Medio</td><td>Curto a medio</td><td>1</td></tr><tr><td>Fintechs Series A/B</td><td>Alta</td><td>Medio a alto</td><td>Medio</td><td>1</td></tr><tr><td>Bancos e financeiras medias</td><td>Alta</td><td>Alto</td><td>Longo</td><td>2</td></tr><tr><td>Startups pre-receita</td><td>Media</td><td>Baixo</td><td>Curto</td><td>3</td></tr><tr><td>Grandes bancos</td><td>Alta</td><td>Alto</td><td>Muito longo</td><td>3</td></tr></tbody></table></div>
+        <div class="two" style="margin-top:48px;"><div class="callout"><h3>ICP: fundo</h3><p>Decisor que precisa de parecer independente, confidencial, executivo e tempestivo antes de aporte ou aquisicao.</p></div><div class="callout"><h3>ICP: fintech</h3><p>Empresa com produto em producao, clientes ativos e patrocinador com autonomia para contratar projeto acima de R$ 20 mil ou advisory acima de R$ 15 mil mensais.</p></div></div>
+      </div>
+    </section>
+
+    <section class="dark">
+      <div class="wrap two"><div><p class="eyebrow">04 / Competicao</p><h2>Independencia e contexto de dominio sao a diferenca.</h2></div><div class="table-wrap"><table><thead><tr><th>Alternativa</th><th>Vantagem</th><th>Limitacao</th></tr></thead><tbody><tr><td>Time interno</td><td>Conhece o contexto</td><td>Pode faltar independencia, tempo ou senioridade</td></tr><tr><td>Consultoria grande</td><td>Marca e escala</td><td>Custo alto e proximidade menor com decisor</td></tr><tr><td>Freelancer generalista</td><td>Preco e rapidez</td><td>Menor repertorio em risco financeiro</td></tr><tr><td>Integrador</td><td>Ferramentas e execucao</td><td>Incentivo comercial reduz neutralidade</td></tr><tr><td>Nenhuma acao</td><td>Sem custo imediato</td><td>Mantem risco oculto</td></tr></tbody></table></div></div>
+    </section>
+
+    <section id="ofertas">
+      <div class="wrap"><p class="eyebrow">05 / Arquitetura de ofertas</p><h2>Escopo definido protege margem e capacidade.</h2><div class="offers"><article class="offer"><span class="label">2 a 4 semanas</span><h3>Diagnostico de Resiliencia</h3><span class="price">R$ 18 mil - R$ 30 mil</span><p>Mapa de riscos, arquitetura, prioridades e roadmap de 90 dias. Porta para advisory.</p></article><article class="offer"><span class="label">2 a 3 semanas</span><h3>Tech Due Diligence</h3><span class="price">R$ 25 mil - R$ 45 mil</span><p>Parecer executivo, matriz de risco, time, processo e recomendacoes ao comite.</p></article><article class="offer"><span class="label">3 meses</span><h3>Advisory Fracionado</h3><span class="price">R$ 15 mil - R$ 22 mil/mes</span><p>De 12 a 20 horas mensais para decisoes, riscos e acompanhamento de roadmap.</p></article><article class="offer"><span class="label">Trimestral</span><h3>Mentoria Executiva</h3><span class="price">R$ 8 mil - R$ 12 mil</span><p>Quatro a seis encontros. Porta de entrada, sem competir por tempo com projetos premium.</p></article></div></div>
+    </section>
+
+    <section class="dark">
+      <div class="wrap two"><div><p class="eyebrow">Limites comerciais</p><h2>Vender reducao de incerteza, nao garantia absoluta.</h2></div><ul class="list"><li>Identificar riscos relevantes dentro do escopo contratado.</li><li>Priorizar medidas por impacto, urgencia, esforco e dependencia.</li><li>Acelerar decisoes de investimento, arquitetura e modernizacao.</li><li>Excluir garantia de disponibilidade, seguranca, conformidade ou sucesso de migracao.</li><li>Registrar que a consultoria recomenda; o cliente decide, executa e opera seus controles.</li></ul></div>
+    </section>
+
+    <section>
+      <div class="wrap"><div class="head"><div><p class="eyebrow">06 / Comercial</p><h2>Autoridade publica, relacionamento direto e funil medido.</h2></div><p>Rede quente, relacionamento com fundos, conteudo tecnico semanal e parcerias seletivas devem funcionar juntos. O objetivo e conversa de qualidade com decisores.</p></div><div class="table-wrap"><table><thead><tr><th>Etapa mensal</th><th>Meta</th><th>Conversao referencia</th></tr></thead><tbody><tr><td>Contatos qualificados iniciados</td><td>30</td><td>-</td></tr><tr><td>Conversas de descoberta</td><td>8</td><td>27%</td></tr><tr><td>Diagnosticos de dor e aderencia</td><td>5</td><td>62%</td></tr><tr><td>Propostas enviadas</td><td>3</td><td>60%</td></tr><tr><td>Contratos fechados</td><td>1</td><td>33%</td></tr></tbody></table></div></div>
+    </section>
+
+    <section id="financas" class="dark">
+      <div class="wrap"><div class="head"><div><p class="eyebrow">07 / Viabilidade financeira</p><h2>Premissas explicitadas, caixa protegido.</h2></div><p>Valores sao referencias de planejamento. Tributos, estrutura juridica e obrigacoes devem ser confirmados com contador e advogado antes de operar.</p></div><div class="scenarios"><article class="scenario"><span>Conservador</span><h3>Um retainer e diligencia trimestral</h3><p>R$ 15 mil recorrentes e uma diligencia de R$ 20 mil por trimestre.</p><strong>R$ 21,7 mil</strong><span>receita media mensal</span></article><article class="scenario"><span>Base</span><h3>Dois retainers e diligencia trimestral</h3><p>Dois contratos de R$ 18 mil e uma diligencia de R$ 30 mil por trimestre.</p><strong>R$ 46 mil</strong><span>receita media mensal</span></article><article class="scenario"><span>Meta</span><h3>Dois retainers premium</h3><p>Dois contratos de R$ 22 mil e uma diligencia de R$ 40 mil por trimestre.</p><strong>R$ 57,3 mil</strong><span>receita media mensal</span></article></div><div class="two" style="margin-top:50px;"><div class="metric"><strong>R$ 34,9 mil</strong><p>Estimativa do cenario base apos R$ 4,6 mil de reserva tributaria e R$ 6,5 mil de custos mensais, antes da remuneracao do socio.</p></div><div class="table-wrap"><table><thead><tr><th>Premissa</th><th>Referencia</th></tr></thead><tbody><tr><td>Retainer medio</td><td>R$ 18 mil/mes</td></tr><tr><td>Diligencia media</td><td>R$ 20 mil a R$ 30 mil</td></tr><tr><td>Reserva tributaria</td><td>10% da receita, a validar</td></tr><tr><td>Equilibrio operacional</td><td>R$ 7.222, excluindo retirada</td></tr><tr><td>Reserva para transicao</td><td>Seis meses de despesas</td></tr></tbody></table></div></div></div>
+    </section>
+
+    <section><div class="wrap"><div class="head"><div><p class="eyebrow">08 / Operacao</p><h2>Uma estrutura pequena com limite claro.</h2></div><p>O fundador conduz venda e entrega intelectual no primeiro ano. Especialistas independentes entram apenas quando a diligencia exigir profundidade complementar.</p></div><div class="table-wrap"><table><thead><tr><th>Atividade</th><th>Limite inicial</th></tr></thead><tbody><tr><td>Retainers simultaneos</td><td>2 clientes de ate 20 horas por mes</td></tr><tr><td>Diligencias simultaneas</td><td>1 projeto por vez</td></tr><tr><td>Horas faturaveis</td><td>60 a 80 horas por mes</td></tr><tr><td>Vendas, conteudo e administracao</td><td>35 a 45 horas por mes</td></tr></tbody></table></div></div></section>
+
+    <section class="dark"><div class="wrap two"><div><p class="eyebrow">09 / Riscos</p><h2>Rigor operacional tambem e produto.</h2></div><div><details><summary>Ciclo de venda e ticket</summary><p>Se houver muitas conversas e poucas propostas, reforcar diagnosticos fechados e indicacoes. Se o ticket for rejeitado, reforcar impacto e embalagem antes de dar desconto.</p></details><details><summary>Escopo e sobrecarga</summary><p>Pedidos de implementacao e suporte devem virar aditivo ou backlog pago. Respeitar limite de dois retainers para proteger qualidade e reputacao.</p></details><details><summary>Confidencialidade e conflito</summary><p>Usar NDA, minimo privilegio, criptografia e descarte documentado. Declarar e recusar conflitos de interesse em diligencias quando necessario.</p></details><details><summary>Dependencia e prova social</summary><p>Evitar que um cliente represente mais de 50% da receita apos o primeiro ano. Construir casos anonimizados e recomendacoes autorizadas.</p></details></div></div></section>
+
+    <section id="plano"><div class="wrap"><p class="eyebrow">10 / Implementacao</p><h2>O plano de 90 dias mede compra real.</h2><div class="steps"><article class="step"><h3>Dias 1 a 30</h3><p>Definir estrutura juridica, contratos, NDAs, escopos, checklist e apresentacao. Mapear 60 contatos e realizar 12 conversas.</p></article><article class="step"><h3>Dias 31 a 60</h3><p>Enviar tres propostas, fechar e entregar o primeiro projeto pago, obter caso ou depoimento e revisar a oferta.</p></article><article class="step"><h3>Dias 61 a 90</h3><p>Converter diagnostico em advisory, fechar retainer ou segunda diligencia e implantar CRM, pipeline e caixa.</p></article></div></div></section>
+
+    <section><div class="wrap two"><div><p class="eyebrow">11 / Validacao</p><h2>Substituir suposicoes por respostas de clientes.</h2></div><ul class="list"><li>Qual evento faz o decisor contratar avaliacao externa agora?</li><li>Quem aprova o orcamento e como funciona a compra?</li><li>Qual resultado torna o ticket racional?</li><li>Que evidencia remove a maior objecao?</li><li>Qual oferta entrega ciclo, margem e conversao melhores?</li><li>Que parceiros ja possuem confianca do ICP?</li></ul></div></section>
+
+    <section class="final"><div class="wrap"><p class="eyebrow">Conclusao</p><h2>A maior incerteza e comercial, nao tecnica.</h2><p>A proxima acao e vender a primeira oferta fechada: um Diagnostico de Resiliencia e Risco em tres semanas, com mapa de riscos e roadmap executivo. A escala deve vir depois da evidencia de compra, por meio de retainers, metodo documentado e parceiros especializados.</p><a class="button" href="ESTUDO_COMPLETO.md">Abrir documento fonte</a></div></section>
+  </main>
+  <footer><div class="wrap">Estudo de viabilidade para consultoria de arquitetura, modernizacao e risco em servicos financeiros.</div></footer>
+</body>
+</html>
